@@ -5,16 +5,18 @@ require_relative 'chess_piece.rb'
 class Knight < ChessPiece
 
   # Constants
-  ROW = 0
-  COL = 1
+  KNIGHT = "KNIGHT"
+  BLACK  = "BLACK"
+  ROW    = 0
+  COL    = 1
 
   def initialize(color)
-    if color.upcase == "BLACK"
+    if color.upcase == BLACK
       unicode = "\u265E"
     else
       unicode = "\u2658"
     end
-    super(type= "Knight", color, unicode)
+    super(type= KNIGHT, color, unicode)
   end
 
   # Checks if the move is L-Shape

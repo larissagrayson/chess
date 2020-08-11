@@ -10,17 +10,18 @@ require_relative './pieces/pawn.rb'
 class Board
   attr_accessor :board
 
-  def initialize(row, col, board_title="")
+  def initialize(row, col)
     @MAX_ROW = row
     @MAX_COL = col
     @board = Array.new(@MAX_ROW) {Array.new(@MAX_COL, " ")}
-    @board_title = board_title
+    @board_title = "    A   B   C   D   E   F   G   H\n"
   end
 
   # Prints the board to the console
   def to_s
     str = String.new(@board_title)
-    @board.each do |row|
+    @board.each_with_index do |row, index|
+      str += index.to_s + " "
       str += "|"
       row.each do |space|
         if space == " "
@@ -46,16 +47,16 @@ class Board
     end
   end
 
-  # Checks if the requested location is empty and within the bounds of the board
-  def valid_location?(location)
+  # Checks if the requested location is within the bounds of the board
+  def location_on_board?(location)
     row = location[0]
     col = location[1]
-    if row < 0 || row >= @MAX_ROW
+    if row < 0 || row > @MAX_ROW
       return false
-    elsif col < 0 || col >= @MAX_COL
+    elsif col < 0 || col > @MAX_COL
       return false
-    elsif @board[row][col] != " "
-      return false
+  #  elsif @board[row][col] != " "
+    #  return false
     else
       return true
     end
@@ -65,7 +66,7 @@ class Board
   def place_piece(piece, new_location)
     row = new_location[0]
     col = new_location[1]
-    if valid_location?(new_location)
+    if location_on_board?(new_location) && space_empty?(new_location)
       @board[row][col] = piece
     end
   end
@@ -93,79 +94,25 @@ class Board
     return @board[row][col]
   end
 
-  def is_space_empty?(location)
+  # Checks if a given space is empty
+  def space_empty?(location)
     row = location[0]
     col = location[1]
     return @board[row][col] == " "
   end
 
+  # Checks if there are any pieces occupying a given set of spaces
+  def pieces_blocking_path?(path)
+    result = Array.new
+    path = path[1..-2]
+    path.each do |space|
+      result << space_empty?(space)
+    end  
+    if result.any?(false) # some spaces are not empty
+      return true
+    else
+      return false
+    end
+  end
+
 end # End of ChessBoard Class
-
-
-# Test Script #
-
-
-
-board = Board.new(8,8)
-black_king = King.new('black')
-black_queen = Queen.new('black')
-black_rook_1 = Rook.new('black')
-black_rook_2 = Rook.new('black')
-black_knight_1 = Knight.new('black')
-black_knight_2 = Knight.new('black')
-black_bishop_1 = Bishop.new('black')
-black_bishop_2 = Bishop.new('black')
-num = 1
-row = 1
-col = 0
-8.times do
-  black_pawn_num = Pawn.new('black')
-  num += 1
-  board.place_piece(black_pawn_num, [row, col])
-  col += 1
-end
-
-board.place_piece(black_rook_1, [0,0])
-board.place_piece(black_knight_1, [0,1])
-board.place_piece(black_bishop_1, [0,2])
-board.place_piece(black_queen, [0,3])
-board.place_piece(black_king, [0,4])
-board.place_piece(black_bishop_2, [0,5])
-board.place_piece(black_knight_2, [0,6])
-board.place_piece(black_rook_2, [0,7])
-
-
-
-white_king = King.new('white')
-white_queen = Queen.new('white')
-white_rook_1 = Rook.new('white')
-white_rook_2 = Rook.new('white')
-white_knight_1 = Knight.new('white')
-white_knight_2 = Knight.new('white')
-white_bishop_1 = Bishop.new('white')
-white_bishop_2 = Bishop.new('white')
-num = 1
-row = 6
-col = 0
-8.times do
-  white_pawn_num = Pawn.new('white')
-  num += 1
-  board.place_piece(white_pawn_num, [row, col])
-  col += 1
-end
-
-board.place_piece(white_rook_1, [7,0])
-board.place_piece(white_knight_1, [7,1])
-board.place_piece(white_bishop_1, [7,2])
-board.place_piece(white_queen, [7,3])
-board.place_piece(white_king, [7,4])
-board.place_piece(white_bishop_2, [7,5])
-board.place_piece(white_knight_2, [7,6])
-board.place_piece(white_rook_2, [7,7])
-
-
-puts board
-
-board.move_piece([6,0], [5,0])
-puts
-puts board
