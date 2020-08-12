@@ -48,7 +48,7 @@ class Board
   end
 
   # Checks if the requested location is within the bounds of the board
-  def location_on_board?(location)
+  def is_location_on_board?(location)
     row = location[0]
     col = location[1]
     if row < 0 || row > @MAX_ROW
@@ -66,7 +66,7 @@ class Board
   def place_piece(piece, new_location)
     row = new_location[0]
     col = new_location[1]
-    if location_on_board?(new_location) && space_empty?(new_location)
+    if is_location_on_board?(new_location) && space_empty?(new_location)
       @board[row][col] = piece
     end
   end
@@ -80,7 +80,7 @@ class Board
 
   # Moves the piece on the board and sets start location to blank
   def move_piece(origin, destination)
-    if location_on_board?(destination)
+    if is_location_on_board?(destination)
       piece = piece_at(origin)
       remove_piece(origin)
       place_piece(piece, destination)
