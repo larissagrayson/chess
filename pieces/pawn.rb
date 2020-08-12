@@ -58,6 +58,31 @@ class Pawn < ChessPiece
     return moves
   end
 
+  # Returns an array of all moves a pawn could possibly take
+  def get_all_possible_moves(starting_location)
+    start_row = starting_location[ROW]
+    start_col = starting_location[COL]
+    moves = Array.new
+    puts start_row
+    if @color == BLACK && start_row == 1
+      moves << [start_row+1, start_col]
+      moves << [start_row+2, start_col]
+    elsif @color == BLACK
+        moves << [start_row+1, start_col]
+    elsif @color == WHITE && start_row == 6
+        moves << [start_row-1, start_col]
+        moves << [start_row-2, start_col]
+    else
+      moves << [start_row-1, start_col]
+    end
+
+    moves.delete_if do |move|
+      move[ROW] > 7 || move[ROW] < 0 || move[COL] > 7 || move[COL] < 0
+    end
+
+    return moves
+  end
+
   # Checks if the pawn is trying to move diagonally
   # Needed for en_passant and captures
   def moving_diagonally?(origin, destination)
@@ -76,3 +101,9 @@ class Pawn < ChessPiece
     return false
   end
 end # end of Pawn Class
+
+pawn = Pawn.new('white')
+puts "Starting location: [4,3]"
+moves = pawn.get_all_possible_moves([0,0])
+print moves.empty?
+puts

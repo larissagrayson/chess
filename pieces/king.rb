@@ -74,10 +74,10 @@ class King < ChessPiece
   end
 
   # Returns an array of all possible moves based on current location
-  def get_all_possible_moves(position)
+  def get_all_possible_moves(starting_location)
     moves = Array.new
-    row = position[ROW]
-    col = position[COL]
+    row = starting_location[ROW]
+    col = starting_location[COL]
     moves << [row+1, col]   # down 1 space
     moves << [row-1, col]   # up 1 space
     moves << [row, col+1]   # right 1 space
@@ -86,6 +86,11 @@ class King < ChessPiece
     moves << [row-1, col+1] # up-right 1 space
     moves << [row+1, col-1] # down-left 1 space
     moves << [row+1, col+1] # up-right 1 space
+
+    moves.delete_if do |move|
+      move[ROW] > 7 || move[ROW] < 0 || move[COL] > 7 || move[COL] < 0
+    end
+
     return moves
   end
 
@@ -215,3 +220,9 @@ class King < ChessPiece
       return moves
     end
 end # end of King Class
+
+king = King.new('white')
+puts "Starting location: [7,7]"
+moves = king.get_all_possible_moves([7,7])
+print moves
+puts

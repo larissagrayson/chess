@@ -116,20 +116,17 @@ class Board
     return @board[row][col] == " "
   end
 
-  # Checks if there are any pieces occupying a given set of spaces
-  def pieces_blocking_path?(path)
+  def no_pieces_blocking_path?(path)
     result = Array.new
-    path = path[1..-2]
-    path.each do |space|
-      result << space_empty?(space)
-    end
-
-    # return result.all?(true) ** BETTER
-    if result.any?(false) # some spaces are not empty
-      return true
+    if path.length == 2
+      result << true
     else
-      return false
+      path = path[1..-2]
+      path.each do |space|
+        result << space_empty?(space) # returns true
+      end
     end
+    return result.all?(true)
   end
 
   # Returns an array of all pieces of given color

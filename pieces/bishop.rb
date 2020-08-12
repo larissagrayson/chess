@@ -79,4 +79,54 @@ class Bishop < ChessPiece
     end
     return moves
   end
+
+  # Returns an array of all moves a bishop could possibly take
+  def get_all_possible_moves(starting_location)
+    start_row = starting_location[ROW]
+    start_col = starting_location[COL]
+    moves = Array.new
+
+    # up left
+    col = start_col
+    row = start_row
+    while col > 0 && row > 0
+      moves << [row-1, col-1]
+      col-=1
+      row-=1
+    end
+
+    # down right
+    col = start_col
+    row = start_row
+    while col < 7 && row < 7
+      moves << [row+1, col+1]
+      col+=1
+      row+=1
+    end
+
+    # up right
+    col = start_col
+    row = start_row
+    while col < 7 && row > 0
+      moves << [row-1, col+1]
+      col+=1
+      row-=1
+    end
+    # down left
+    col = start_col
+    row = start_row
+    while row < 7 && col > 0
+      moves << [row+1, col-1]
+      col-=1
+      row+=1
+    end
+   return moves
+  end
+
 end # End of Bishop Class
+
+bishop = Bishop.new('black')
+puts "Starting location: [4,3]"
+moves = bishop.get_all_possible_moves([4,3])
+print moves
+puts

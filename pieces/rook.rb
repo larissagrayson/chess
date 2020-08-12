@@ -89,4 +89,28 @@ class Rook < ChessPiece
     return moves
   end
 
+  # Returns an array of all moves a rook could possibly take
+  def get_all_possible_moves(starting_location)
+    start_row = starting_location[ROW]
+    start_col = starting_location[COL]
+    moves = Array.new
+    col = 0
+    row = 0
+    # get all possible horizontal moves
+    while col <= 7
+      moves << [start_row, col]
+      col += 1
+    end
+    # get all possible vertical moves
+    while row <= 7
+      moves << [row, start_col]
+      row += 1
+    end
+    moves.delete(starting_location)
+    return moves
+  end
+
 end  #end of Rook class
+
+#rook = Rook.new('black')
+#rook.get_all_possible_moves([4,3])

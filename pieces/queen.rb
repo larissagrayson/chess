@@ -44,6 +44,63 @@ def get_moves(origin, destination)
   return moves
 end
 
+  # Returns an array of all moves a queen could possibly take
+  def get_all_possible_moves(starting_location)
+    start_row = starting_location[ROW]
+    start_col = starting_location[COL]
+    moves = Array.new
+
+    # get all possible horizontal moves
+    col = 0
+    row = 0
+    while col <= 7
+      moves << [start_row, col]
+      col += 1
+    end
+    # get all possible vertical moves
+    while row <= 7
+      moves << [row, start_col]
+      row += 1
+    end
+    moves.delete(starting_location)
+
+    # up left
+    col = start_col
+    row = start_row
+    while col > 0 && row > 0
+      moves << [row-1, col-1]
+      col-=1
+      row-=1
+    end
+
+    # down right
+    col = start_col
+    row = start_row
+    while col < 7 && row < 7
+      moves << [row+1, col+1]
+      col+=1
+      row+=1
+    end
+
+    # up right
+    col = start_col
+    row = start_row
+    while col < 7 && row > 0
+      moves << [row-1, col+1]
+      col+=1
+      row-=1
+    end
+    # down left
+    col = start_col
+    row = start_row
+    while row < 7 && col > 0
+      moves << [row+1, col-1]
+      col-=1
+      row+=1
+    end
+   return moves
+  end
+
   private
 
     # Returns the direction of the move between origin and destination
@@ -171,4 +228,14 @@ end
       return moves
     end
 
+
+
+
 end # end of Queen Class
+
+
+queen = Queen.new('black')
+puts "Starting location: [4,3]"
+moves = queen.get_all_possible_moves([7,7])
+print moves
+puts
