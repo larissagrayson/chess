@@ -73,6 +73,22 @@ class King < ChessPiece
     return moves
   end
 
+  # Returns an array of all possible moves based on current location
+  def get_all_possible_moves(position)
+    moves = Array.new
+    row = position[ROW]
+    col = position[COL]
+    moves << [row+1, col]   # down 1 space
+    moves << [row-1, col]   # up 1 space
+    moves << [row, col+1]   # right 1 space
+    moves << [row, col-1]   # left 1 space
+    moves << [row-1, col-1] # up-left 1 space
+    moves << [row-1, col+1] # up-right 1 space
+    moves << [row+1, col-1] # down-left 1 space
+    moves << [row+1, col+1] # up-right 1 space
+    return moves
+  end
+
   private
     # Returns the direction of the move between origin and destination
     def get_direction(origin, destination)

@@ -132,4 +132,19 @@ class Board
     end
   end
 
+  # Returns an array of all pieces of given color
+  def get_pieces(color)
+    pieces = Array.new
+    @board.each do |row|
+      row.each do |space|
+        if space != " " && space.color == color
+
+          pieces << space
+        end
+      end
+    end
+      return pieces
+  end
+
+
 end # End of ChessBoard Class

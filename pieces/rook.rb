@@ -90,6 +90,3 @@ class Rook < ChessPiece
   end
 
 end  #end of Rook class
-
-rook = Rook.new('black')
-puts rook.color

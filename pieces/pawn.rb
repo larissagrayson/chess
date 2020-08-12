@@ -63,8 +63,6 @@ class Pawn < ChessPiece
   def moving_diagonally?(origin, destination)
     row_diff = destination[ROW] - origin[ROW]
     col_diff = (destination[COL] - origin[COL]).abs
-    puts @color
-    puts row_diff
     # Moving 1 space on a diagonal
     if col_diff == 1 && row_diff.abs == 1
       # Black is moving down
