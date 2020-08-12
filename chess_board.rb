@@ -80,7 +80,7 @@ class Board
 
   # Moves the piece on the board and sets start location to blank
   def move_piece(origin, destination)
-    if valid_location?(destination)
+    if location_on_board?(destination)
       piece = piece_at(origin)
       remove_piece(origin)
       place_piece(piece, destination)
@@ -92,6 +92,21 @@ class Board
     row = location[0]
     col = location[1]
     return @board[row][col]
+  end
+
+## CLEAN UP
+  def location_of_piece(piece)
+    location = Array.new
+      @board.each_with_index do |row, r_index|
+        row.each_with_index do |space, c_index|
+          if space == piece
+            location[0] = r_index
+            location[1] = c_index
+            break
+          end
+        end
+      end
+    location
   end
 
   # Checks if a given space is empty
@@ -107,7 +122,9 @@ class Board
     path = path[1..-2]
     path.each do |space|
       result << space_empty?(space)
-    end  
+    end
+
+    # return result.all?(true) ** BETTER
     if result.any?(false) # some spaces are not empty
       return true
     else

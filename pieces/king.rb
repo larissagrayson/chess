@@ -2,22 +2,30 @@
 
 require_relative 'chess_piece.rb'
 
+
+
 class King < ChessPiece
+  attr_accessor :first_move
 
   # Constants
   DIAGONAL   = "DIAGONAL"
   HORIZONTAL = "HORIZONTAL"
   VERTICAL   = "VERTICAL"
+  KING       = "KING"
+  BLACK      = "BLACK"
+  WHITE      = "WHITE"
   ROW        = 0
   COL        = 1
 
   def initialize(color)
-    if color.upcase == "BLACK"
+    color = color.upcase
+    if color == BLACK
       unicode="\u265A"
     else
       unicode="\u2654"
     end
-    super(type="King", color, unicode)
+    super(type=KING, color, unicode)
+    @first_move = true
   end
 
   # Checks if the move is on a diagonal, horizontal, or vertical
@@ -38,6 +46,18 @@ class King < ChessPiece
     else
       return false
     end
+  end
+
+  # Checks if a King can perform Castling
+  def can_castle?(origin, destination)
+    difference_between_cols = (destination[COL] - origin[COL])
+
+    if (origin[ROW] == destination[ROW]) &&  @first_move && (difference_between_cols.abs == 2)
+      (@color == BLACK && origin[ROW] == 0) || (@color == WHITE && origin[ROW] == 7)
+    else
+      false
+    end
+
   end
 
   # Returns an array of all the squares crossed to get to the destination

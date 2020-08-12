@@ -8,9 +8,10 @@ class Pawn < ChessPiece
   attr_reader :first_move
 
   # Constants
-  ROW = 0
+  ROW   = 0
   BLACK = "BLACK"
   WHITE = "WHITE"
+  PAWN  = "PAWN"
 
   def initialize(color)
     if color.upcase == BLACK
@@ -19,7 +20,7 @@ class Pawn < ChessPiece
       unicode="\u2659"
     end
 
-    super(type="Pawn", color.upcase, unicode)
+    super(type=PAWN, color.upcase, unicode)
     @first_move = true
   end
 

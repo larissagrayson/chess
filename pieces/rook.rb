@@ -4,17 +4,23 @@ require_relative 'chess_piece.rb'
 
 class Rook < ChessPiece
 
+  attr_accessor :first_move
+
   # Constants
-  ROW = 0
-  COL = 1
+  BLACK = "BLACK"
+  ROOK  = "ROOK"
+  ROW   = 0
+  COL   = 1
 
   def initialize(color)
-    if color.upcase == "BLACK"
+    color = color.upcase
+    if color == BLACK
       unicode="\u265C"
     else
       unicode="\u2656"
     end
-    super(type="Rook", color, unicode)
+    super(type=ROOK, color, unicode)
+    @first_move = true
   end
 
   # Checks if the move is in a straight line along a row or column
@@ -84,3 +90,6 @@ class Rook < ChessPiece
   end
 
 end  #end of Rook class
+
+rook = Rook.new('black')
+puts rook.color
