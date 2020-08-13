@@ -63,7 +63,6 @@ class Pawn < ChessPiece
     start_row = starting_location[ROW]
     start_col = starting_location[COL]
     moves = Array.new
-    puts start_row
     if @color == BLACK && start_row == 1
       moves << [start_row+1, start_col]
       moves << [start_row+2, start_col]
@@ -102,8 +101,7 @@ class Pawn < ChessPiece
   end
 end # end of Pawn Class
 
-pawn = Pawn.new('white')
-puts "Starting location: [4,3]"
-moves = pawn.get_all_possible_moves([0,0])
-print moves.empty?
-puts
+pawn = Pawn.new('black')
+puts "Starting location: [1,1]"
+moves = pawn.get_all_possible_moves([1,1])
+print moves

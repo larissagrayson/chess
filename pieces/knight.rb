@@ -11,7 +11,8 @@ class Knight < ChessPiece
   COL    = 1
 
   def initialize(color)
-    if color.upcase == BLACK
+    color = color.upcase
+    if color == BLACK
       unicode = "\u265E"
     else
       unicode = "\u2658"

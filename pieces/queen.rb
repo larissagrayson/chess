@@ -8,16 +8,21 @@ class Queen < ChessPiece
   DIAGONAL   = "DIAGONAL"
   HORIZONTAL = "HORIZONTAL"
   VERTICAL   = "VERTICAL"
+
+  BLACK      = "BLACK"
+  QUEEN      = "QUEEN"
+
   ROW        = 0
   COL        = 1
 
   def initialize(color)
-    if color.upcase == "BLACK"
+    color = color.upcase
+    if color.upcase == BLACK
       unicode="\u265B"
     else
       unicode="\u2655"
     end
-    super(type="Queen", color, unicode)
+    super(type=QUEEN, color, unicode)
   end
 
   # Checks if the move is on a diagonal, horizontal, or vertical

@@ -135,12 +135,11 @@ class Board
     @board.each do |row|
       row.each do |space|
         if space != " " && space.color == color
-
           pieces << space
         end
       end
     end
-      return pieces
+    return pieces
   end
 
 

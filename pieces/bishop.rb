@@ -3,16 +3,21 @@ require_relative 'chess_piece.rb'
 
 class Bishop < ChessPiece
 
-    # Constants
-    ROW = 0
-    COL = 1
+  # Constants
+  BISHOP     = "BISHOP"
+  BLACK      = "BLACK"
+  WHITE      = "WHITE"
+  ROW        = 0
+  COL        = 1
+
   def initialize(color)
-    if color.upcase == "BLACK"
+    color = color.upcase
+    if color == BLACK
       unicode="\u265D"
     else
       unicode="\u2657"
     end
-    super(type="Bishop", color, unicode)
+    super(type=BISHOP, color, unicode)
   end
 
   # Checks if the move is on a diagonal

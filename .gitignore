@@ -4,3 +4,4 @@
 # Ignore main chess file for now
 chess.rb
 chess_draft.rb
+chess_practice.rb
