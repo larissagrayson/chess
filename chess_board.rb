@@ -116,6 +116,7 @@ class Board
     return @board[row][col] == " "
   end
 
+  # Checks that all spaces are empty along a given path
   def no_pieces_blocking_path?(path)
     result = Array.new
     if path.length == 2

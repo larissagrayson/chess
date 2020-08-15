@@ -5,3 +5,5 @@
 chess.rb
 chess_draft.rb
 chess_practice.rb
+chess_practice_old.rb
+game_messages.rb
