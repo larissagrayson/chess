@@ -33,7 +33,7 @@ class Chess
     @current_player = WHITE
     @en_passant ={ possible?:             false,
                    pieces_eligible:       Array.new,
-                   piece_to_be_captured:  nil,
+                   piece_to_be_captured:  Array.new,
                    location_to_move:      nil   }
     load_screen
   end
@@ -44,7 +44,6 @@ class Chess
     puts
     game_start_message
     puts "\nCurrent Player: #{@current_player}"
-    unless checkmate? || stalemate?
       move = nil
       until move !=nil
         move = request_user_move
@@ -59,24 +58,37 @@ class Chess
           switch_player
           puts "\nCurrent Player: #{@current_player}"
           move = nil
-          if check?
+          if check? && checkmate?
+            game_over("checkmate")
+            break
+          elsif check?
             puts "#{@current_player} You are in check!!"
+          elsif stalemate?
+            game_over("stalemate")
+            break
           end
-          next
         else
-        puts "INVALID MOVE"
-        move = nil
+          puts "INVALID MOVE"
+          move = nil
         end
+      end
     end
-    end
-
-
-
-  end
 
 
 private
 
+
+   def game_over(type)
+     if type == "checkmate"
+       puts "Checkmate on #{@current_player}!!"
+       puts "Game Over"
+     elsif type ==  "stalemate"
+       puts "Stalemate! Game Over"
+     end
+     # play_again?
+   end
+
+  # Switches between players
   def switch_player
     if @current_player == WHITE
       @current_player = BLACK
@@ -85,6 +97,7 @@ private
     end
   end
 
+  # Ensures the player tried to move only his piece color
   def correct_color?(origin)
     piece = @board.piece_at(origin)
     if piece.color != @current_player
@@ -94,6 +107,7 @@ private
     end
   end
 
+  # Intial setup of all pieces on the board
   def place_pieces
     # Place black pieces
     row = 1
@@ -180,14 +194,23 @@ private
   # 8/13 - CHECK IF ENPASSANT OR CASTLING ALSO POSSIBLE IN HERE?
   # Checks if the move the player requested is valid for the piece and destination
   def valid_move?(origin, destination)
-    piece = @board.piece_at(origin)
-    path = piece.get_moves(origin, destination)
 
+    piece = @board.piece_at(origin)
+
+    if piece == " "
+       return false
+    end
+
+    path = piece.get_moves(origin, destination)
     if piece.type != PAWN && is_move_possible?(piece, origin, destination) && is_path_clear?(path) && (is_destination_empty?(destination) || is_opponent_at_destination?(piece.color, destination))
       return true
     elsif piece.type == PAWN && is_move_possible?(piece, origin, destination) && is_path_clear?(path) && is_destination_empty?(destination)
       return true
     elsif piece.type == PAWN && is_pawn_attempting_capture?(origin, destination)
+      return true
+    elsif piece.type == PAWN && enpassant_possible?(piece, destination)
+      return true
+    elsif piece.type == KING && castling_possible?(piece, origin, destination)
       return true
     else
       return false
@@ -202,33 +225,29 @@ private
     @board.remove_piece(location)
   end
 
-  # should #clear_enpassant be moved somewhere else and called once after the player that could have taken it moves?
   # Moves the piece and sets appropriate conditions based on piece type
   def execute_move(origin, destination)
     piece = @board.piece_at(origin)
 
-    if piece == ROOK && piece.first_move
+    if piece.type == ROOK && piece.first_move
         piece.first_move = false
+        @board.remove_piece(destination)
         @board.move_piece(origin, destination)
-      #  clear_enpassant
-    elsif piece == KING && castling_possible?(piece, origin, destination)
+    elsif piece.type == KING && castling_possible?(piece, origin, destination)
         perform_castling(piece, origin, destination)
-      #  clear_enpassant
-    elsif piece == KING && piece.first_move
+    elsif piece.type == KING && piece.first_move
         piece.first_move = false
+        @board.remove_piece(destination)
         @board.move_piece(origin, destination)
-    #    clear_enpassant
-    elsif piece == PAWN && enpassant_possible?(pawn, destination)
+  elsif piece.type == PAWN && enpassant_possible?(piece, destination)
         perform_enpassant(piece)
     else
         @board.remove_piece(destination)
         @board.move_piece(origin, destination)
-      #  clear_enpassant
-      #puts @board
     end
   end
 
-  # probably should also toggle current_player to opposite color
+  # Performs post-move game actions (pawn promotions, enpassant setup, etc.)
   def execute_post_move_actions(origin, destination)
     clear_enpassant
     piece = @board.piece_at(destination)
@@ -368,10 +387,11 @@ private
     origin = @board.location_of_piece(piece)
     possible_moves = piece.get_all_possible_moves(origin)
 
+
     valid_moves = Array.new
     if piece.type == KING
       possible_moves.each do |destination|
-        if valid_move?(origin, destination) && !check?#(piece, destination)
+        if valid_move?(origin, destination) && !will_moving_put_king_in_check?(piece, destination) # check?#(piece, destination)
           valid_moves << destination
         end
       end
@@ -422,6 +442,9 @@ private
   end
 
   def will_moving_put_king_in_check?(piece, destination)
+    if piece.type == ROOK || piece.type == KING || piece.type == PAWN
+       first_move = piece.first_move
+     end
     origin = @board.location_of_piece(piece)
     temp_captured_piece = @board.piece_at(destination)
     if valid_move?(origin, destination)
@@ -436,7 +459,12 @@ private
         result = false
       end
       @board.move_piece(destination, origin)
+      if piece.type == ROOK || piece.type == KING || piece.type == PAWN
+          piece.first_move = first_move
+       end
       @board.place_piece(temp_captured_piece, destination)
+
+
     else
       result = false
     end
@@ -471,14 +499,20 @@ private
     left_enemy = nil
     right_enemy = nil
 
+
+
     if is_opponent_at_destination?(pawn.color, left_side)
       left_enemy = @board.piece_at(left_side)
-      @en_passant[:pieces_eligible] << left_enemy
+      if !left_enemy.nil?
+        @en_passant[:pieces_eligible] << left_enemy
+      end
     end
 
     if is_opponent_at_destination?(pawn.color, right_side)
-      right_enemy = @board.piece_at(left_side)
-      @en_passant[:pieces_eligible] << right_enemy
+      right_enemy = @board.piece_at(right_side)
+      if !right_enemy.nil?
+        @en_passant[:pieces_eligible] << right_enemy
+      end
     end
 
     if (left_enemy != nil && left_enemy.type == PAWN) || (right_enemy != nil && right_enemy.type == PAWN)
@@ -528,7 +562,7 @@ private
   def clear_enpassant
     # set enpassant hash to nil
     @en_passant ={ possible: false,
-                  pieces_eligible: nil,
+                  pieces_eligible: Array.new,
                   piece_to_be_captured:  Array.new,
                   location_to_move:  nil}
   end
@@ -575,7 +609,9 @@ private
   def castling_possible?(king, origin, destination)
     # Check if king can castle
     potential_rook = get_rook_for_castling(origin, destination)
-    if potential_rook.type != ROOK
+    if potential_rook == " "
+      return false
+    elsif potential_rook.type != ROOK
       return false
     elsif !potential_rook.first_move
       return false

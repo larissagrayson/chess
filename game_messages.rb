@@ -113,6 +113,7 @@ module GameMessages
 
   end
 
+
   # Display game quit message
   def quit
     print "\nAre you sure you want to quit? (Y)/(N)"
