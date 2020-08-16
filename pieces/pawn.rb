@@ -100,8 +100,3 @@ class Pawn < ChessPiece
     return false
   end
 end # end of Pawn Class
-
-pawn = Pawn.new('black')
-puts "Starting location: [1,1]"
-moves = pawn.get_all_possible_moves([1,1])
-print moves

@@ -109,8 +109,4 @@ class Rook < ChessPiece
     moves.delete(starting_location)
     return moves
   end
-
 end  #end of Rook class
-
-#rook = Rook.new('black')
-#rook.get_all_possible_moves([4,3])

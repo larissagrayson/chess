@@ -8,10 +8,8 @@ class Queen < ChessPiece
   DIAGONAL   = "DIAGONAL"
   HORIZONTAL = "HORIZONTAL"
   VERTICAL   = "VERTICAL"
-
   BLACK      = "BLACK"
   QUEEN      = "QUEEN"
-
   ROW        = 0
   COL        = 1
 
@@ -26,28 +24,28 @@ class Queen < ChessPiece
   end
 
   # Checks if the move is on a diagonal, horizontal, or vertical
-def valid_move?(origin, destination)
-  # check if horizontal or vertial
-  direction = get_direction(origin, destination)
-  if direction == HORIZONTAL || direction == VERTICAL || direction == DIAGONAL
-    return true
-  else
-    return false
+  def valid_move?(origin, destination)
+    # check if horizontal or vertial
+    direction = get_direction(origin, destination)
+    if direction == HORIZONTAL || direction == VERTICAL || direction == DIAGONAL
+      return true
+    else
+      return false
+    end
   end
-end
 
 # Returns an array of all the squares crossed to get to the destination
-def get_moves(origin, destination)
-  direction = get_direction(origin, destination)
-  if direction == HORIZONTAL || direction == VERTICAL
-    moves = get_horizontal_vertical_moves(origin, destination)
-  elsif direction == DIAGONAL
-    moves = get_diagonal_moves(origin, destination)
-  else
-    moves = nil
+  def get_moves(origin, destination)
+    direction = get_direction(origin, destination)
+    if direction == HORIZONTAL || direction == VERTICAL
+      moves = get_horizontal_vertical_moves(origin, destination)
+    elsif direction == DIAGONAL
+      moves = get_diagonal_moves(origin, destination)
+    else
+      moves = nil
+    end
+    return moves
   end
-  return moves
-end
 
   # Returns an array of all moves a queen could possibly take
   def get_all_possible_moves(starting_location)
@@ -232,15 +230,4 @@ end
       end
       return moves
     end
-
-
-
-
 end # end of Queen Class
-
-
-queen = Queen.new('black')
-puts "Starting location: [4,3]"
-moves = queen.get_all_possible_moves([7,7])
-print moves
-puts

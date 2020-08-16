@@ -1,9 +1,6 @@
 # Ignore all text files
 *.txt
 
-# Ignore main chess file for now
-chess.rb
-chess_draft.rb
+# Ignore test files
 chess_practice.rb
-chess_practice_old.rb
-game_messages.rb
+IGNORE/

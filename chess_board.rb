@@ -7,7 +7,7 @@ require_relative './pieces/knight.rb'
 require_relative './pieces/bishop.rb'
 require_relative './pieces/pawn.rb'
 
-class Board
+class ChessBoard
   attr_accessor :board
 
   def initialize(row, col)
@@ -21,7 +21,7 @@ class Board
   def to_s
     str = String.new(@board_title)
     @board.each_with_index do |row, index|
-      str += index.to_s + " "
+      str += (8-index).to_s + " "
       str += "|"
       row.each do |space|
         if space == " "
@@ -94,7 +94,7 @@ class Board
     return @board[row][col]
   end
 
-## CLEAN UP
+# Returns the location of a given piece
   def location_of_piece(piece)
     location = Array.new
       @board.each_with_index do |row, r_index|
@@ -142,6 +142,5 @@ class Board
     end
     return pieces
   end
-
 
 end # End of ChessBoard Class

@@ -220,9 +220,3 @@ class King < ChessPiece
       return moves
     end
 end # end of King Class
-
-king = King.new('white')
-puts "Starting location: [7,7]"
-moves = king.get_all_possible_moves([7,7])
-print moves
-puts

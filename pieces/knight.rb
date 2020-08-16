@@ -60,9 +60,3 @@ class Knight < ChessPiece
    return moves
   end
 end # end of Knight Class
-
-knight = Knight.new('white')
-puts "Starting location: [4,3]"
-moves = knight.get_all_possible_moves([0,0])
-print moves
-puts

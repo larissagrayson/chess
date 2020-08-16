@@ -129,9 +129,3 @@ class Bishop < ChessPiece
   end
 
 end # End of Bishop Class
-
-bishop = Bishop.new('black')
-puts "Starting location: [4,3]"
-moves = bishop.get_all_possible_moves([4,3])
-print moves
-puts
