@@ -85,7 +85,7 @@ private
      elsif type ==  "stalemate"
        puts "Stalemate! Game Over"
      end
-     # play_again?
+     # play_again
    end
 
   # Switches between players

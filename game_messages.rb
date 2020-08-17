@@ -16,11 +16,16 @@ module GameMessages
     case response
     when "1"
       puts "Starting new game..."
+      sleep 1
       play_game
     when '2'
       puts "Loading game..."
+      sleep 1
+      #play_again
       load_game
     when "3"
+      puts "Loading rules..."
+      sleep 1
       rules
     when '4'
       exit!
@@ -31,8 +36,6 @@ module GameMessages
 
   # Displays game rules
   def rules
-    system ("clear")
-
     puts "\n\t\t\t RULES\n"
     puts "Chess is a board game played with 2 players (WHITE & BLACK). WHITE \nalways starts first and play continues by alternating between colors. \nWHITE pieces are located at the bottom two rows of the board and BLACK is \nlocated on the top two rows. Each player has 16 pieces: 1 KING, 1 QUEEN, \n2 ROOKS, 2 KNIGHTS, 2 BISHOPS, and 8 PAWNS.\n\n"
 
@@ -64,16 +67,20 @@ module GameMessages
     when "1"
       load_screen
     when "2"
-      #play_game
+      puts "Starting new game..."
+      sleep 1
+      play_game
     else
       rules
     end
   end
 
+  # Loads a saved game from a file
   def load_game
     puts "LOADING GAME GOES HERE"
   end
 
+  # Save the game to a file
   def save_game
     puts "SAVE GAME HERE"
   end
@@ -81,12 +88,12 @@ module GameMessages
   # Display game start message
   def game_start_message
     puts "Please enter all moves in the form of: \'a2:a3\'"
-    puts "If at any time you'd like to quit, enter \'Q\'."
+    puts "If at any time you'd like to quit, enter \'q\'."
   end
 
   # Prompt user for input
   def request_user_move
-    print "Please enter your desired move >> "
+    print "\nPlease enter your desired move >> "
     response = gets.chomp.upcase
 
      if response == "Q"
@@ -117,27 +124,23 @@ module GameMessages
     end
   end
 
-  #DONE - clean up puts statements though & where what/who will get the conversion? -- global variables, return to another method?
+  # Converts the user inputed chess move to the 2D internal array layout
   def convert_input(move)
-
   #User input is in the form of: [origin_COL, origin_ROW, destination_COL, destination_ROW] & numbering starts at 1 beginning at the bottom left square
 
-   # Need to convert to the internal computer form of: origin[row, col] & destination[row, col] with numbering being zero offset and starting in upper left
+  # Need to convert to the internal computer form of: origin[row, col] & destination[row, col] with numbering being zero offset and starting in upper left
+  origin_row = 8-(move[1].to_i)
+  origin_col = (move[0].each_byte.first)-65  # Converts uppercase char to number
 
-    origin_row = 8-(move[1].to_i)
-    origin_col = (move[0].each_byte.first)-65  # Converts uppercase char to number
-
-    destination_row = 8-(move[3].to_i)
-    destination_col = (move[2].each_byte.first)-65
-
-     return [[origin_row, origin_col],[destination_row, destination_col]]
-
+  destination_row = 8-(move[3].to_i)
+  destination_col = (move[2].each_byte.first)-65
+  return [[origin_row, origin_col],[destination_row, destination_col]]
   end
 
 
   # Display game quit message
   def quit
-    print "\nAre you sure you want to quit? (Y)/(N)"
+    print "Are you sure you want to quit? Y/N >> "
     response = gets.chomp.upcase
     if response == "Y"
       prompt_for_save
@@ -148,7 +151,7 @@ module GameMessages
 
   # Prompts the user for save
   def prompt_for_save
-    print "\nWould you like to save your game? (Y)/(N)"
+    print "Would you like to save your game? Y/N >> "
     response = gets.chomp.upcase
     if response == "Y"
       save_game
@@ -157,9 +160,13 @@ module GameMessages
     end
   end
 
-
-#game_start_message
-#load_screen
-
-#validate_input("h2:h")
+  def play_again
+    print "\nWould you like to play again? Y/N >> "
+    response = gets.chomp.upcase
+    if response == "Y"
+      Chess.new
+    else
+      exit!
+    end
+  end
 end # End of GameMessages Module
