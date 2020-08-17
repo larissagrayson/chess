@@ -31,8 +31,29 @@ module GameMessages
 
   # Displays game rules
   def rules
-    puts "Game Rules"
-    # Explain game simply and then provide link to wikipedia for more info"
+    system ("clear")
+
+    puts "\n\t\t\t RULES\n"
+    puts "Chess is a board game played with 2 players (WHITE & BLACK). WHITE \nalways starts first and play continues by alternating between colors. \nWHITE pieces are located at the bottom two rows of the board and BLACK is \nlocated on the top two rows. Each player has 16 pieces: 1 KING, 1 QUEEN, \n2 ROOKS, 2 KNIGHTS, 2 BISHOPS, and 8 PAWNS.\n\n"
+
+    puts "\t\t\t OBJECTIVE\n"
+    puts "The objective of the game is to use your pieces to put the opponent's \nKING under threat of capture (CHECK) without any possible way to escape \n(CHECKMATE). If there are no possible moves left for either player and \nthe KING is not in check, the game will end in a draw (STALEMATE).\n\n"
+
+    puts "\t\t\t PIECES\n"
+    puts "A piece cannot land on a square occupied by a friendly piece. If a \npiece lands on a square occupied by an opponent's piece, then that piece \nis considered \"captured\" and removed from the board. Pieces may not \njump over other pieces, except for the KNIGHT.
+    \nKING - Can move 1 square in any direction, but cannot move to a space that \nwill put him in check
+    \nROOK - Can move any number of squares in a straight line (horizontally or \nvertically).
+    \nBISHOP - Can move any number of squares diagonally.
+    \nQUEEN - The most powerful piece in the game. Combines the movements of the \nROOK and BISHOP.
+    \nKNIGHT - Can move in any direction in an L-shape pattern (2 spaces in one \ndirection and 1 space at a right angle).
+    \nPAWN - Can only move forward 1 space at a time, unless it's his first \nmove, then he can move up to two squares at a time.\n\n"
+
+    puts "\t\t\tSPECIAL MOVES\n"
+    puts "CASTLING - Once per game, each player may move their KING 2 spaces to \nthe left or right toward a ROOK. The ROOK then is placed on thesquare \nbeside the KING towards the center of the board. This move can only be \ndone if the KING and ROOK are on their first move and the KING does not \nmove from check, out of check, or through check.
+    \nPROMOTION - When a PAWN reaches the opposite end of the board, it can be \npromoted. The player can choose to promote their PAWN to a QUEEN, ROOK, \nBISHOP, or KNIGHT.
+    \nEN PASSANT - Occurs when a PAWN makes a 2 step advance from its starting \nposition and ends up next to an opposing PAWN. On the very next turn, the \nopponent may capture him \"in passing\" by moving diagonally behind him. \nIf this is not taken in the next turn, it is forfeited.\n\n"
+
+
     puts "[1] Go Back"
     puts "[2] New Game"
     print ">> "
