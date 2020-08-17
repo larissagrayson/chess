@@ -9,6 +9,8 @@ require_relative './pieces/knight.rb'
 require_relative './pieces/bishop.rb'
 require_relative './pieces/pawn.rb'
 
+require 'yaml'
+
 
 # Constants
 KNIGHT = "KNIGHT"
@@ -47,6 +49,10 @@ class Chess
       move = nil
       until move !=nil
         move = request_user_move
+        if move == "Q"
+          quit
+          break
+        end
         origin = move[0]
         destination = move[1]
         piece =  @board.piece_at(origin)
@@ -76,8 +82,6 @@ class Chess
 
 
 private
-
-
    def game_over(type)
      if type == "checkmate"
        puts "Checkmate on #{@current_player}!!"
@@ -87,6 +91,46 @@ private
      end
      # play_again
    end
+
+   def save_game
+     yaml = YAML::dump(self)
+     print "Filename: "
+     filename = gets.chomp
+
+     filename.gsub!(" ","_")
+     Dir.mkdir("saved_games") unless Dir.exists? "saved_games"
+     if Dir.entries("saved_games").include?("#{filename}.yaml")
+       print "That filename already exists, would you like to overwrite it? Y/N >> "
+        response = gets.chomp.upcase
+        if response == "Y"
+          puts "Saving game..."
+          sleep 1
+          filename = "saved_games/#{filename}.yaml"
+          File.open("#{filename}", "w")
+          IO.write("#{filename}", yaml)
+          puts "#{filename} saved!"
+        else
+          save_game
+        end
+     else
+       puts "Saving game..."
+       sleep 1
+       filename = "saved_games/#{filename}.yaml"
+       File.open("#{filename}", "w")
+       IO.write("#{filename}", yaml)
+       puts "#{filename} saved!"
+     end
+
+
+   end
+
+     def load_game
+       file = File.open("save_game.txt", "r")
+       yaml = File.read(file)
+       file.close
+       YAML::load(yaml)
+     end
+
 
   # Switches between players
   def switch_player
@@ -239,8 +283,12 @@ private
         piece.first_move = false
         @board.remove_piece(destination)
         @board.move_piece(origin, destination)
-  elsif piece.type == PAWN && enpassant_possible?(piece, destination)
+    elsif piece.type == PAWN && enpassant_possible?(piece, destination)
         perform_enpassant(piece)
+    elsif piece.type == PAWN && piece.first_move
+      piece.first_move = false
+      @board.remove_piece(destination)
+      @board.move_piece(origin, destination)
     else
         @board.remove_piece(destination)
         @board.move_piece(origin, destination)

@@ -81,9 +81,9 @@ module GameMessages
   end
 
   # Save the game to a file
-  def save_game
-    puts "SAVE GAME HERE"
-  end
+  #def save_game
+#    puts "SAVE GAME HERE"
+#  end
 
   # Display game start message
   def game_start_message
@@ -97,8 +97,9 @@ module GameMessages
     response = gets.chomp.upcase
 
      if response == "Q"
-       quit
-       return
+       desired_move = "Q"
+       #quit
+       #return
      else
        desired_move = validate_input(response)
      end

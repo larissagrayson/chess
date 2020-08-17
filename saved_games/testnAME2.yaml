@@ -1,0 +1,195 @@
+--- !ruby/object:Chess
+board: &1 !ruby/object:ChessBoard
+  MAX_ROW: 8
+  MAX_COL: 8
+  board:
+  - - !ruby/object:Rook
+      type: ROOK
+      color: BLACK
+      unicode: "♜"
+      first_move: true
+    - !ruby/object:Knight
+      type: KNIGHT
+      color: BLACK
+      unicode: "♞"
+    - !ruby/object:Bishop
+      type: BISHOP
+      color: BLACK
+      unicode: "♝"
+    - !ruby/object:Queen
+      type: QUEEN
+      color: BLACK
+      unicode: "♛"
+    - !ruby/object:King
+      type: KING
+      color: BLACK
+      unicode: "♚"
+      first_move: true
+    - !ruby/object:Bishop
+      type: BISHOP
+      color: BLACK
+      unicode: "♝"
+    - !ruby/object:Knight
+      type: KNIGHT
+      color: BLACK
+      unicode: "♞"
+    - !ruby/object:Rook
+      type: ROOK
+      color: BLACK
+      unicode: "♜"
+      first_move: true
+  - - !ruby/object:Pawn
+      type: PAWN
+      color: BLACK
+      unicode: "♟"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: BLACK
+      unicode: "♟"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: BLACK
+      unicode: "♟"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: BLACK
+      unicode: "♟"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: BLACK
+      unicode: "♟"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: BLACK
+      unicode: "♟"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: BLACK
+      unicode: "♟"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: BLACK
+      unicode: "♟"
+      first_move: true
+  - - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+  - - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+  - - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+  - - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+    - " "
+  - - !ruby/object:Pawn
+      type: PAWN
+      color: WHITE
+      unicode: "♙"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: WHITE
+      unicode: "♙"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: WHITE
+      unicode: "♙"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: WHITE
+      unicode: "♙"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: WHITE
+      unicode: "♙"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: WHITE
+      unicode: "♙"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: WHITE
+      unicode: "♙"
+      first_move: true
+    - !ruby/object:Pawn
+      type: PAWN
+      color: WHITE
+      unicode: "♙"
+      first_move: true
+  - - !ruby/object:Rook
+      type: ROOK
+      color: WHITE
+      unicode: "♖"
+      first_move: true
+    - !ruby/object:Knight
+      type: KNIGHT
+      color: WHITE
+      unicode: "♘"
+    - !ruby/object:Bishop
+      type: BISHOP
+      color: WHITE
+      unicode: "♗"
+    - !ruby/object:Queen
+      type: QUEEN
+      color: WHITE
+      unicode: "♕"
+    - !ruby/object:King
+      type: KING
+      color: WHITE
+      unicode: "♔"
+      first_move: true
+    - !ruby/object:Bishop
+      type: BISHOP
+      color: WHITE
+      unicode: "♗"
+    - !ruby/object:Knight
+      type: KNIGHT
+      color: WHITE
+      unicode: "♘"
+    - !ruby/object:Rook
+      type: ROOK
+      color: WHITE
+      unicode: "♖"
+      first_move: true
+  board_title: "    A   B   C   D   E   F   G   H\n"
+test_board: *1
+current_player: WHITE
+en_passant:
+  :possible?: false
+  :pieces_eligible: []
+  :piece_to_be_captured: []
+  :location_to_move: 
