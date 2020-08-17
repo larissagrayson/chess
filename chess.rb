@@ -11,7 +11,6 @@ require_relative './pieces/pawn.rb'
 
 require 'yaml'
 
-
 # Constants
 KNIGHT = "KNIGHT"
 QUEEN  = "QUEEN"
@@ -29,19 +28,27 @@ COL    = 1
 class Chess
   include GameMessages
 
+
+  attr_accessor :board, :current_player, :en_passant
+
+
   def initialize
     @board = ChessBoard.new(8,8)
-    @test_board = @board
     @current_player = WHITE
     @en_passant ={ possible?:             false,
                    pieces_eligible:       Array.new,
                    piece_to_be_captured:  Array.new,
                    location_to_move:      nil   }
+      place_pieces
     load_screen
+
+  #  puts @board
+  #  puts
+  #  game_start_message
   end
 
   def play_game
-    place_pieces
+  #  place_pieces
     puts @board
     puts
     game_start_message
@@ -50,11 +57,14 @@ class Chess
       until move !=nil
         move = request_user_move
         if move == "Q"
+          move = nil
           quit
-          break
+        else
+          origin = move[0]
+          destination = move[1]
         end
-        origin = move[0]
-        destination = move[1]
+      #  origin = move[0]
+      #  destination = move[1]
         piece =  @board.piece_at(origin)
         if valid_move?(origin, destination) && correct_color?(origin) && !will_moving_put_king_in_check?(piece, destination)
           puts "VALID MOVE"
@@ -82,54 +92,72 @@ class Chess
 
 
 private
-   def game_over(type)
-     if type == "checkmate"
-       puts "Checkmate on #{@current_player}!!"
-       puts "Game Over"
-     elsif type ==  "stalemate"
-       puts "Stalemate! Game Over"
-     end
+   # Game over logic
+  def game_over(type)
+    if type == "checkmate"
+      puts "Checkmate on #{@current_player}!!"
+      puts "Game Over"
+    elsif type ==  "stalemate"
+      puts "Stalemate! Game Over"
+    end
      # play_again
-   end
+  end
 
-   def save_game
-     yaml = YAML::dump(self)
-     print "Filename: "
-     filename = gets.chomp
+   # Saves the current game state to a yaml file
+  def save_game
+    yaml = YAML::dump(self)
+    print "Filename: "
+    filename = gets.chomp
+    filename.gsub!(" ","_")
+    Dir.mkdir("saved_games") unless Dir.exists? "saved_games"
+    if Dir.entries("saved_games").include?("#{filename}.yaml")
+      print "That filename already exists, would you like to overwrite it? Y/N >> "
+      response = gets.chomp.upcase
+      if response == "Y"
+        puts "Saving game..."
+        sleep 1
+        filename = "saved_games/#{filename}.yaml"
+        File.open("#{filename}", "w")
+        IO.write("#{filename}", yaml)
+        puts "#{filename} saved!"
+        exit!
+      else
+        save_game
+      end
+    else
+      puts "Saving game..."
+      sleep 1
+      filename = "saved_games/#{filename}.yaml"
+      File.open("#{filename}", "w")
+      IO.write("#{filename}", yaml)
+      puts "#{filename} saved!"
+      exit!
+    end
+  end
 
-     filename.gsub!(" ","_")
-     Dir.mkdir("saved_games") unless Dir.exists? "saved_games"
-     if Dir.entries("saved_games").include?("#{filename}.yaml")
-       print "That filename already exists, would you like to overwrite it? Y/N >> "
-        response = gets.chomp.upcase
-        if response == "Y"
-          puts "Saving game..."
-          sleep 1
-          filename = "saved_games/#{filename}.yaml"
-          File.open("#{filename}", "w")
-          IO.write("#{filename}", yaml)
-          puts "#{filename} saved!"
-        else
-          save_game
-        end
-     else
-       puts "Saving game..."
-       sleep 1
-       filename = "saved_games/#{filename}.yaml"
-       File.open("#{filename}", "w")
-       IO.write("#{filename}", yaml)
-       puts "#{filename} saved!"
+  # Loads a saved game
+  def load_game
+    files = Dir.entries("saved_games")
+    puts "\nExisting files: "
+    files.each do |file|
+       next if file == "." || file == ".."
+       puts File.basename(file, ".yaml")
      end
-
-
-   end
-
-     def load_game
-       file = File.open("save_game.txt", "r")
-       yaml = File.read(file)
-       file.close
-       YAML::load(yaml)
-     end
+     print "\nWhich file do you want to load? >> "
+    filename = gets.chomp
+    if !Dir.entries("saved_games").include?("#{filename}.yaml")
+      puts "\nFile does not exist!  Please select from the list below."
+      load_game
+    else
+      game_file = YAML.load_file("saved_games/#{filename}.yaml")
+      @board = game_file.board
+      @current_player = game_file.current_player
+      @en_passant = game_file.en_passant
+      puts "Loading game..."
+      sleep 1
+      play_game
+    end
+  end
 
 
   # Switches between players

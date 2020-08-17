@@ -1,5 +1,5 @@
 --- !ruby/object:Chess
-board: &1 !ruby/object:ChessBoard
+board: !ruby/object:ChessBoard
   MAX_ROW: 8
   MAX_COL: 8
   board:
@@ -109,7 +109,10 @@ board: &1 !ruby/object:ChessBoard
     - " "
     - " "
     - " "
-    - " "
+    - !ruby/object:Knight
+      type: KNIGHT
+      color: WHITE
+      unicode: "♘"
   - - !ruby/object:Pawn
       type: PAWN
       color: WHITE
@@ -176,20 +179,16 @@ board: &1 !ruby/object:ChessBoard
       type: BISHOP
       color: WHITE
       unicode: "♗"
-    - !ruby/object:Knight
-      type: KNIGHT
-      color: WHITE
-      unicode: "♘"
+    - " "
     - !ruby/object:Rook
       type: ROOK
       color: WHITE
       unicode: "♖"
       first_move: true
   board_title: "    A   B   C   D   E   F   G   H\n"
-test_board: *1
-current_player: WHITE
+current_player: BLACK
 en_passant:
-  :possible?: false
+  :possible: false
   :pieces_eligible: []
   :piece_to_be_captured: []
   :location_to_move: 
