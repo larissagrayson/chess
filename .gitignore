@@ -2,5 +2,4 @@
 *.txt
 
 # Ignore test files
-chess_practice.rb
 IGNORE/
