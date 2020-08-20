@@ -63,11 +63,9 @@ class Chess
           origin = move[0]
           destination = move[1]
         end
-      #  origin = move[0]
-      #  destination = move[1]
         piece =  @board.piece_at(origin)
         if valid_move?(origin, destination) && correct_color?(origin) && !will_moving_put_king_in_check?(piece, destination)
-          puts "VALID MOVE"
+        #  puts "VALID MOVE"
           execute_move(origin, destination)
           execute_post_move_actions(origin, destination)
           puts @board
@@ -84,7 +82,7 @@ class Chess
             break
           end
         else
-          puts "INVALID MOVE"
+          puts "Invalid Move!"
           move = nil
         end
       end
@@ -100,7 +98,7 @@ private
     elsif type ==  "stalemate"
       puts "Stalemate! Game Over"
     end
-     # play_again
+      play_again
   end
 
    # Saves the current game state to a yaml file
@@ -116,7 +114,7 @@ private
       if response == "Y"
         puts "Saving game..."
         sleep 1
-        filename = "saved_games/#{filename}.yaml"
+        filename = "saved_games/#{filename}.yml"
         File.open("#{filename}", "w")
         IO.write("#{filename}", yaml)
         puts "#{filename} saved!"
@@ -127,7 +125,7 @@ private
     else
       puts "Saving game..."
       sleep 1
-      filename = "saved_games/#{filename}.yaml"
+      filename = "saved_games/#{filename}.yml"
       File.open("#{filename}", "w")
       IO.write("#{filename}", yaml)
       puts "#{filename} saved!"
@@ -137,19 +135,29 @@ private
 
   # Loads a saved game
   def load_game
-    files = Dir.entries("saved_games")
+    if !Dir.exists? "saved_games"
+      puts "No saved games exist!"
+      load_screen
+      return
+    end
+    files = Dir.children("saved_games")
+    if files.empty?
+      puts "No saved games found!"
+      load_screen
+    end
     puts "\nExisting files: "
     files.each do |file|
-       next if file == "." || file == ".."
-       puts File.basename(file, ".yaml")
+       puts File.basename(file, ".yml")
      end
-     print "\nWhich file do you want to load? >> "
+     print "\nPlease type the name of the file you wish to load or \"BACK\" to go back >> "
     filename = gets.chomp
-    if !Dir.entries("saved_games").include?("#{filename}.yaml")
+    if filename.upcase == "BACK"
+      load_screen
+    elsif !Dir.entries("saved_games").include?("#{filename}.yml")
       puts "\nFile does not exist!  Please select from the list below."
       load_game
     else
-      game_file = YAML.load_file("saved_games/#{filename}.yaml")
+      game_file = YAML.load_file("saved_games/#{filename}.yml")
       @board = game_file.board
       @current_player = game_file.current_player
       @en_passant = game_file.en_passant
@@ -263,7 +271,6 @@ private
     end
   end
 
-  # 8/13 - CHECK IF ENPASSANT OR CASTLING ALSO POSSIBLE IN HERE?
   # Checks if the move the player requested is valid for the piece and destination
   def valid_move?(origin, destination)
 
@@ -292,7 +299,7 @@ private
 
   ## GAME ACTION METHODS ##
 
-  # TESTED on 8/12  -# not being used...maybe remove??
+  # Caputures the opponent's piece
   def capture_piece(location)
     @board.remove_piece(location)
   end
@@ -358,7 +365,7 @@ private
   end
 
   # Determines if the game is in check mate
-  def checkmate?#(king)
+  def checkmate?
     king_location = find_king_location(@current_player)
     king = @board.piece_at(king_location)
 
@@ -398,7 +405,7 @@ private
     king_location = find_king_location(@current_player)
     king = @board.piece_at(king_location)
 
-    if check?#(king, king_location)
+    if check?
       return false
     end
 
@@ -467,7 +474,7 @@ private
     valid_moves = Array.new
     if piece.type == KING
       possible_moves.each do |destination|
-        if valid_move?(origin, destination) && !will_moving_put_king_in_check?(piece, destination) # check?#(piece, destination)
+        if valid_move?(origin, destination) && !will_moving_put_king_in_check?(piece, destination)
           valid_moves << destination
         end
       end
@@ -676,7 +683,6 @@ private
      end
    end
    @board.place_piece(promoted_pawn, destination)
-   #puts @board
   end
 
   ## CASTLING METHODS ##
@@ -699,7 +705,7 @@ private
 
     king_move_into_check = Array.new
     kings_moves.each do |move|
-      king_move_into_check << check?#(king, move)
+      king_move_into_check << check?
     end
 
     if king_move_into_check.all?(false) && is_path_clear?(kings_moves) && is_destination_empty?(destination)

@@ -21,7 +21,6 @@ module GameMessages
     when '2'
       puts "Retrieving game files..."
       sleep 1
-      #play_again
       load_game
     when "3"
       puts "Loading rules..."
@@ -75,16 +74,6 @@ module GameMessages
     end
   end
 
-  # Loads a saved game from a file
-  #def load_game
-  #  puts "LOADING GAME GOES HERE"
-#  end
-
-  # Save the game to a file
-  #def save_game
-#    puts "SAVE GAME HERE"
-#  end
-
   # Display game start message
   def game_start_message
     puts "Please enter all moves in the form of: \'a2:a3\'"
@@ -97,9 +86,7 @@ module GameMessages
     response = gets.chomp.upcase
 
      if response == "Q"
-       #desired_move = "Q"
        quit
-       #return
      else
        desired_move = validate_input(response)
      end
