@@ -582,18 +582,25 @@ private
     left_enemy = nil
     right_enemy = nil
 
-
-
-    if is_opponent_at_destination?(pawn.color, left_side)
-      left_enemy = @board.piece_at(left_side)
-      if !left_enemy.nil?
+    if left_side[COL] < 0
+      left_enemy = nil
+      if is_opponent_at_destination?(pawn.color, right_side)
+        right_enemy = @board.piece_at(right_side)
+        @en_passant[:pieces_eligible] << right_enemy
+      end
+    elsif right_side[COL] > 7
+      right_enemy = nil
+      if is_opponent_at_destination?(pawn.color, left_side)
+        left_enemy = @board.piece_at(left_side)
         @en_passant[:pieces_eligible] << left_enemy
       end
-    end
-
-    if is_opponent_at_destination?(pawn.color, right_side)
-      right_enemy = @board.piece_at(right_side)
-      if !right_enemy.nil?
+    else
+      if is_opponent_at_destination?(pawn.color, left_side)
+        left_enemy = @board.piece_at(left_side)
+        @en_passant[:pieces_eligible] << left_enemy
+      end
+      if is_opponent_at_destination?(pawn.color, right_side)
+        right_enemy = @board.piece_at(right_side)
         @en_passant[:pieces_eligible] << right_enemy
       end
     end
